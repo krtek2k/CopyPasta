@@ -8,3 +8,5 @@ Features:
 - informs about wrong CTRL+C combinations such as LAlt+C or LWin+C
 - informs about CRLF (Carriage Return/Line Feed) as an empty Copy&Pasta
 - informs about empty Copy&Pasta or A_Tab or up to 3 Space 
+
+<img loading="lazy" src="./resources/1.png" alt="1 png" />
