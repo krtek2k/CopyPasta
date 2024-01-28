@@ -1,5 +1,9 @@
-﻿#Requires AutoHotkey v2.0
-#SingleInstance Force
+﻿; Script:    CopyPasta.ahk
+; License:   The Unlicense
+; Author:    krtek2k
+; Github:    https://github.com/krtek2k/CopyPasta
+; Date:      2024-01-28
+; Version:   1.0
 
 /*
  * Informs about clipboard events using tooltips at caret or at mouse
@@ -9,6 +13,9 @@
  * - informs about CRLF (Carriage Return/Line Feed) as an empty Copy&Pasta
  * - informs about empty Copy&Pasta or A_Tab or up to 3 Space 
  */
+
+#Requires AutoHotkey v2.0
+#SingleInstance Force
 
 CoordMode("ToolTip", "Screen")
 
@@ -27,19 +34,19 @@ $^x::{
 }
 
 HandleCopyPasta() {
-	if ClipWait(1) {
+	if ClipWait(1, 1) {
 		CopyPasta(CopyPastaEvent()).ShowTooltip()
 	}
 	else {
 		CopyPasta(CopyPastaLongerThanExpectedEvent()).ShowTooltip()
 		
-		if ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000) {
+		if ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000, 1) {
 			CopyPasta(CopyPastaEvent()).ShowTooltip()
 		}
 		else {
 			CopyPasta(CopyPastaWaitingEvent()).ShowTooltip()
 			
-			if ClipWait(10) {
+			if ClipWait(10, 1) {
 				CopyPasta(CopyPastaEvent()).ShowTooltip()
 			}
 			else {
@@ -71,6 +78,9 @@ $!c::{
 class CopyPasta {
 		
 	class Settings {
+	
+		static cb_buffer_obj_size_as_empty := 32 ; ClipboardAll().Size - 3 spaces take 32 as well as one A_Tab, anything bigger in buffer consider as data if not text
+		
 		static ttip_cooldown_ms := 1300
 		static ttip_cooldown_error_multiplier := 2
 		static ttip_offset := 10
@@ -146,8 +156,7 @@ class CopyPastaEventBase {
 				CopyPasta.Settings.ttip_msg_line_icon
 				" "
 				CopyPasta.Settings.ttip_msg_app
-				"`n"
-				msg
+				"`n" msg
 			)
 		}
 	}
@@ -197,7 +206,8 @@ class CopyPastaEvent extends CopyPastaEventBase  {
 			1, 
 			CopyPasta.Settings.ttip_msg_clip_lenght_limit
 		)
-		this._isError := (StrLen(A_Clipboard) <= 3 && (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n")) ? true : false 
+		
+		this._isError := (ClipboardAll().Size <= CopyPasta.Settings.cb_buffer_obj_size_as_empty && (StrLen(A_Clipboard) <= 3 && (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n"))) ? true : false 
 	}
 }
 
