@@ -1,9 +1,7 @@
 # CopyPasta
+Informs about blank Copy&Pasta and prevents, by this ,repeating the process of copying nothing in the clipboard
+
 Basically just shows tooltip at caret or at mouse. Does not interrupt or change any thing.
-
-Informs about clipboard events using tooltips
-
-Prevents blank Copy&Pasta and repeating the process after nothing was copied and pasted
 
 Features:
 - informs about sucessful Copy&Pasta
