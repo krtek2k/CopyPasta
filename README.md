@@ -1,4 +1,4 @@
-# CopyPasta
+# Copy&Pasta
 Informs about blank Copy&Pasta and prevents, by this, repeating the process of copying nothing in the clipboard
 
 Basically just shows tooltip at caret or at mouse. Does not interrupt or change any thing.
