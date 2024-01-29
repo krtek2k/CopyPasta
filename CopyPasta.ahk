@@ -6,74 +6,19 @@
 ; Version:   1.0
 
 /*
- * Informs about clipboard events using tooltips at caret or at mouse
- * Prevents blank Copy&Pasta and repeating the process after nothing was copied and pasted
- * - informs about sucessful Copy&Pasta
+ * Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the process of copying nothing in the clipboard
+ * Basically just shows tooltip at caret or at mouse. Does not interrupt or change any thing.
+ * - informs about sucessful Copy&Pasta CTRL+C
  * - informs about wrong CTRL+C combinations such as LAlt+C or LWin+C
+ * - informs about empty Copy&Pasta CTRL+C or A_Tab or up to 3 Space
  * - informs about CRLF (Carriage Return/Line Feed) as an empty Copy&Pasta
- * - informs about empty Copy&Pasta or A_Tab or up to 3 Space 
+ * - When Copy&Pasta CTRL+C process take too long, there is a little information flow with timeout
  */
 
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
 CoordMode("ToolTip", "Screen")
-
-; Ctrl=^
-$^c::{
-	A_Clipboard := ""
-	Send "^c"
-	HandleCopyPasta()
-}
-
-; Ctrl=^
-$^x::{
-	A_Clipboard := ""
-	Send "^x"
-	HandleCopyPasta()
-}
-
-HandleCopyPasta() {
-	if ClipWait(1, 1) {
-		CopyPasta(CopyPastaEvent()).ShowTooltip()
-	}
-	else {
-		CopyPasta(CopyPastaLongerThanExpectedEvent()).ShowTooltip()
-		
-		if ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000, 1) {
-			CopyPasta(CopyPastaEvent()).ShowTooltip()
-		}
-		else {
-			CopyPasta(CopyPastaWaitingEvent()).ShowTooltip()
-			
-			if ClipWait(10, 1) {
-				CopyPasta(CopyPastaEvent()).ShowTooltip()
-			}
-			else {
-				CopyPasta(CopyPastaTimeoutEvent()).ShowTooltip()
-			}
-		}
-	}
-}
-
-; FN key - vkFF sc163 not found 
-$vkFF::{ 	
-	HotIf (*) => GetKeyState("vkFF", "P")
-	Hotkey "*c",(*) => CopyPasta(CopyPastaFnEvent()).ShowTooltip()
-	KeyWait "vkFF"
-}
-
-; LWin=#
-$#c::{
-	CopyPasta(CopyPastaLWinEvent()).ShowTooltip()
-	Send "#c"
-}
-
-; Alt=! 
-$!c::{
-	CopyPasta(CopyPastaLAltEvent()).ShowTooltip()
-	Send "!c"
-}
 
 class CopyPasta {
 		
@@ -208,6 +153,62 @@ class CopyPastaEvent extends CopyPastaEventBase  {
 		)
 		
 		this._isError := (ClipboardAll().Size <= CopyPasta.Settings.cb_buffer_obj_size_as_empty && (StrLen(A_Clipboard) <= 3 && (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n"))) ? true : false 
+	}
+}
+
+; Ctrl=^
+$^c::{
+	A_Clipboard := ""
+	Send "^c"
+	HandleCopyPasta()
+}
+
+; Ctrl=^
+$^x::{
+	A_Clipboard := ""
+	Send "^x"
+	HandleCopyPasta()
+}
+
+; FN key - vkFF sc163 not found 
+$vkFF::{ 	
+	HotIf (*) => GetKeyState("vkFF", "P")
+	Hotkey "*c",(*) => CopyPasta(CopyPastaFnEvent()).ShowTooltip()
+	KeyWait "vkFF"
+}
+
+; LWin=#
+$#c::{
+	CopyPasta(CopyPastaLWinEvent()).ShowTooltip()
+	Send "#c"
+}
+
+; Alt=! 
+$!c::{
+	CopyPasta(CopyPastaLAltEvent()).ShowTooltip()
+	Send "!c"
+}
+
+HandleCopyPasta() {
+	if ClipWait(1, 1) {
+		CopyPasta(CopyPastaEvent()).ShowTooltip()
+	}
+	else {
+		CopyPasta(CopyPastaLongerThanExpectedEvent()).ShowTooltip()
+		
+		if ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000, 1) {
+			CopyPasta(CopyPastaEvent()).ShowTooltip()
+		}
+		else {
+			CopyPasta(CopyPastaWaitingEvent()).ShowTooltip()
+			
+			if ClipWait(10, 1) {
+				CopyPasta(CopyPastaEvent()).ShowTooltip()
+			}
+			else {
+				CopyPasta(CopyPastaTimeoutEvent()).ShowTooltip()
+			}
+		}
 	}
 }
 
