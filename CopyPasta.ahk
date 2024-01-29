@@ -3,7 +3,7 @@
 ; Author:    krtek2k
 ; Github:    https://github.com/krtek2k/CopyPasta
 ; Date:      2024-01-28
-; Version:   1.0
+; Version:   1.1
 
 /*
  * Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the process of copying nothing in the clipboard
@@ -23,8 +23,6 @@ class CopyPasta {
 		
 	class Settings {
 	
-		static cb_buffer_obj_size_as_empty := 32 ; ClipboardAll().Size - 3 spaces take 32 as well as one A_Tab, anything bigger in buffer consider as data if not text
-		
 		static ttip_cooldown_ms := 1300
 		static ttip_cooldown_error_multiplier := 2
 		static ttip_offset := 10
@@ -74,6 +72,7 @@ class CopyPasta {
 class CopyPastaEventBase {
 
 	IsError => true
+	Message => this.BuildMessage("")
 	
 	BuildMessage(msg) {
 		if (this.IsError) {
@@ -124,6 +123,12 @@ class CopyPastaWaitingEvent extends CopyPastaEventBase  {
 class CopyPastaTimeoutEvent extends CopyPastaEventBase  {
 	Message => this.BuildMessage(Format(CopyPasta.Settings.ttip_msg_error_line_err_timeout, CopyPasta.Settings.ttip_msg_error_line_icon))
 }
+class CopyPastaEmptyEvent extends CopyPastaEventBase  {
+	Message => this.BuildMessage(Format(CopyPasta.Settings.ttip_msg_error_line_err_empty, CopyPasta.Settings.ttip_msg_error_line_icon))
+}
+class CopyPastaNotTextEvent extends CopyPastaEventBase  {
+	IsError => false
+}
 
 class CopyPastaEvent extends CopyPastaEventBase  {
 
@@ -150,22 +155,30 @@ class CopyPastaEvent extends CopyPastaEventBase  {
 			1, 
 			CopyPasta.Settings.ttip_msg_clip_lenght_limit
 		)
-		this._isError := (ClipboardAll().Size <= CopyPasta.Settings.cb_buffer_obj_size_as_empty && (StrLen(A_Clipboard) <= 3 && (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n"))) ? true : false 
+		this._isError := (StrLen(A_Clipboard) <= 3 && (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n")) ? true : false 
 	}
 }
 
 ; Ctrl=^
 $^c::{
-	A_Clipboard := ""
+	OnClipboardChange OnChangeHandleCopyPasta
 	Send "^c"
-	HandleCopyPasta()
+	if !ClipWait(0, 1) {
+		HandleCopyPasta()
+	}
+	else {
+		CopyPasta(CopyPastaEmptyEvent()).ShowTooltip()
+	}
 }
 
 ; Ctrl=^
 $^x::{
-	A_Clipboard := ""
+	OnClipboardChange OnChangeHandleCopyPasta
 	Send "^x"
-	HandleCopyPasta()
+	if !ClipWait(0, 1)
+		HandleCopyPasta()
+	else
+		CopyPasta(CopyPastaEmptyEvent()).ShowTooltip()
 }
 
 ; FN key - vkFF sc163 not found 
@@ -187,20 +200,29 @@ $!c::{
 	Send "!c"
 }
 
+OnChangeHandleCopyPasta(dataType) {
+	if (dataType = 1) ; text
+	{
+		CopyPasta(CopyPastaEvent()).ShowTooltip()
+		return
+	}
+	CopyPasta(CopyPastaNotTextEvent()).ShowTooltip()
+}
+
 HandleCopyPasta() {
-	if ClipWait(0.5, 1) {
+	if ClipWait(0, 0) {
 		CopyPasta(CopyPastaEvent()).ShowTooltip()
 	}
 	else {
 		CopyPasta(CopyPastaLongerThanExpectedEvent()).ShowTooltip()
 		
-		if ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000, 1) {
+		if ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000, 0) {
 			CopyPasta(CopyPastaEvent()).ShowTooltip()
 		}
 		else {
 			CopyPasta(CopyPastaWaitingEvent()).ShowTooltip()
 			
-			if ClipWait(5, 1) {
+			if ClipWait(5, 0) {
 				CopyPasta(CopyPastaEvent()).ShowTooltip()
 			}
 			else {
