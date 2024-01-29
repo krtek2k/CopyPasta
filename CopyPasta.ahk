@@ -15,7 +15,7 @@
  * - When Copy&Pasta CTRL+C process take too long, there is a little information flow with timeout
  */
 
-#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0-rc.1 64-bit
 #SingleInstance Force
 
 CoordMode("ToolTip", "Screen")
