@@ -17,7 +17,6 @@
 
 #Requires AutoHotkey v2.0-rc.1 64-bit
 #SingleInstance Force
-
 CoordMode("ToolTip", "Screen")
 
 class CopyPasta {
@@ -44,7 +43,7 @@ class CopyPasta {
 		static ttip_msg_error_line_err_win := "{1}             Win+C           {1}"
 		static ttip_msg_error_line_err_alt := "{1}              Alt+C            {1}"
 		static ttip_msg_error_line_err_longer_than_expected := "{1}      HMMMMM...      {1}"
-		static ttip_msg_error_line_err_waiting := "{1}⏳ WAITING...(10s) ⏳ {1}"
+		static ttip_msg_error_line_err_waiting := "{1} ⏳ WAITING....(5s) ⏳ {1}"
 		static ttip_msg_error_line_err_timeout := "{1}     🏁 TIMEOUT 🏁     {1}"
 	}
 	
@@ -146,12 +145,11 @@ class CopyPastaEvent extends CopyPastaEventBase  {
 	
 	__New() {
 		; trim and shorten for tooltip message
-		this._message  := SubStr(
+		this._message := SubStr(
 			StrReplace(Trim(A_Clipboard), A_Tab), 
 			1, 
 			CopyPasta.Settings.ttip_msg_clip_lenght_limit
 		)
-		
 		this._isError := (ClipboardAll().Size <= CopyPasta.Settings.cb_buffer_obj_size_as_empty && (StrLen(A_Clipboard) <= 3 && (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n"))) ? true : false 
 	}
 }
@@ -190,7 +188,7 @@ $!c::{
 }
 
 HandleCopyPasta() {
-	if ClipWait(1, 1) {
+	if ClipWait(0.5, 1) {
 		CopyPasta(CopyPastaEvent()).ShowTooltip()
 	}
 	else {
@@ -202,7 +200,7 @@ HandleCopyPasta() {
 		else {
 			CopyPasta(CopyPastaWaitingEvent()).ShowTooltip()
 			
-			if ClipWait(10, 1) {
+			if ClipWait(5, 1) {
 				CopyPasta(CopyPastaEvent()).ShowTooltip()
 			}
 			else {
