@@ -163,7 +163,7 @@ class CopyPastaEvent extends CopyPastaEventBase  {
 $^c::{
 	OnClipboardChange OnChangeHandleCopyPasta
 	Send "^c"
-	if !ClipWait(0, 1) {
+	if !ClipWait(1, 1) {
 		HandleCopyPasta()
 	}
 	else {
@@ -175,7 +175,7 @@ $^c::{
 $^x::{
 	OnClipboardChange OnChangeHandleCopyPasta
 	Send "^x"
-	if !ClipWait(0, 1)
+	if !ClipWait(1, 1)
 		HandleCopyPasta()
 	else
 		CopyPasta(CopyPastaEmptyEvent()).ShowTooltip()
@@ -210,7 +210,7 @@ OnChangeHandleCopyPasta(dataType) {
 }
 
 HandleCopyPasta() {
-	if ClipWait(0, 0) {
+	if ClipWait(1, 0) {
 		CopyPasta(CopyPastaEvent()).ShowTooltip()
 	}
 	else {
