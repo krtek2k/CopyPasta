@@ -5,8 +5,9 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
 
 Features:
 - informs about sucessful Copy&Pasta CTRL+C
-<img loading="lazy" src="./_resources/1.png" alt="1 png" />
-<img loading="lazy" src="./_resources/1_2.png" alt="2 png" />
+<img loading="lazy" src="./_resources/images/1.png" alt="1 png" />
+<img loading="lazy" src="./_resources/images/2.png" alt="2 png" />
+<img loading="lazy" src="./_resources/images/3.png" alt="3 png" />
 
 - informs about empty Copy&Pasta CTRL+C or A_Tab or up to 3 Space 
 - informs about CRLF (Carriage Return/Line Feed) as an empty Copy&Pasta
