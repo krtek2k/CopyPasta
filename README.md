@@ -7,7 +7,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><p align="center">At caret</p></td>
-   <td style="border: 0 !important;"><p align="center">200 characters limit</p></td>
+   <td style="border: 0 !important;"><p align="center">200 characters preview limit</p></td>
   </tr>
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/1.png" alt="1 png" width=388 height=504 hspace="10" /></td>
@@ -26,10 +26,17 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
    <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/8.png" alt="8 png" width=388 height=504 hspace="10" /></td>
   </tr>
  </table>
-- informs about CRLF (Carriage Return/Line Feed) as an empty Copy&Pasta
-<p align="center"><img loading="lazy" src="./_resources/images/1.png" alt="3 png" /></p>
+ 
 
-- informs about wrong CTRL+C combinations such as LAlt+C or LWin+C
+#### Informs about unwanted combinations such as LAlt+C or LWin+C
+<table style="border: 0 !important;">
+  <tr style="border: 0 !important;">
+   <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/5.png" alt="5 png" width=388 height=504 hspace="10" /></td>
+   <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/6.png" alt="6 png" width=388 height=504 hspace="10" /></td>
+   <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/7.png" alt="7 png" width=388 height=504 hspace="10" /></td>
+  </tr>
+ </table>
+- informs 
 <img loading="lazy" src="./_resources/4.png" alt="4 png" />
 <img loading="lazy" src="./_resources/5.png" alt="5 png" />
 <img loading="lazy" src="./_resources/6.png" alt="6 png" />
