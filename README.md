@@ -11,12 +11,22 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
   </tr>
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/1.png" alt="1 png" width=388 height=504 hspace="10" /></td>
-   <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/3.png" alt="2 png" width=388 height=504 hspace="10" /></td>
+   <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/3.png" alt="3 png" width=388 height=504 hspace="10" /></td>
   </tr>
  </table>
-- informs about empty Copy&Pasta CTRL+C or A_Tab or up to 3 Space 
+#### Informs about empty Copy&Pasta CTRL+C
+<table style="border: 0 !important;">
+  <tr style="border: 0 !important;">
+   <td style="border: 0 !important;"><p align="center">NewLine CRLF (Carriage Return/Line Feed)</p></td>
+   <td style="border: 0 !important;"><p align="center">Copy is already in the clipboard (same bitwise copy)</p></td>
+  </tr>
+  <tr style="border: 0 !important;">
+   <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/4.png" alt="4 png" width=388 height=504 hspace="10" /></td>
+   <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/8.png" alt="8 png" width=388 height=504 hspace="10" /></td>
+  </tr>
+ </table>
 - informs about CRLF (Carriage Return/Line Feed) as an empty Copy&Pasta
-<img loading="lazy" src="./_resources/3.png" alt="3 png" />
+<p align="center"><img loading="lazy" src="./_resources/images/1.png" alt="3 png" /></p>
 
 - informs about wrong CTRL+C combinations such as LAlt+C or LWin+C
 <img loading="lazy" src="./_resources/4.png" alt="4 png" />
