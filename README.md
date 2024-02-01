@@ -6,7 +6,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
 #### Informs about sucessful Copy&Pasta CTRL+C
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
-   <td style="border: 0 !important;">At caret with offset in editors</td>
+   <td style="border: 0 !important;"><p align="center">####At caret with offset in editors</p></td>
    <td style="border: 0 !important;"></td>
   </tr>
   <tr style="border: 0 !important;">
