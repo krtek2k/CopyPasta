@@ -3,14 +3,12 @@ Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the proce
 
 Basically just shows tooltip at caret or at mouse. Does not interrupt or change any thing.
 
-Features:
-- #### Informs about sucessful Copy&Pasta CTRL+C
-
+#### Informs about sucessful Copy&Pasta CTRL+C
 <table>
   <tr>
-   <td><img loading="lazy" src="./_resources/images/1.png" alt="1 png" /></td>
-   <td><img loading="lazy" src="./_resources/images/2.png" alt="2 png" /></td>
-   <td><img loading="lazy" src="./_resources/images/3.png" alt="3 png" /></td>
+   <td><img loading="lazy" src="./_resources/images/1.png" alt="1 png" width=270 height=480 /></td>
+   <td><img loading="lazy" src="./_resources/images/2.png" alt="2 png" width=270 height=480 /></td>
+   <td><img loading="lazy" src="./_resources/images/3.png" alt="3 png" width=270 height=480 /></td>
   </tr>
  </table>
 - informs about empty Copy&Pasta CTRL+C or A_Tab or up to 3 Space 
