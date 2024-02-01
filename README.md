@@ -14,6 +14,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
    <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/3.png" alt="3 png" width=388 height=504 hspace="10" /></td>
   </tr>
  </table>
+ 
 #### Informs about empty Copy&Pasta CTRL+C
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
