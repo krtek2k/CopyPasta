@@ -39,7 +39,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
   </tr>
  </table>
  
-- #### When Copy&Pasta CTRL+C process take too long, there is a little information flow with timeout 
-<img loading="lazy" src="./_resources/9.png" alt="9 png" />
-<img loading="lazy" src="./_resources/10.png" alt="10 png" />
-<img loading="lazy" src="./_resources/11.png" alt="11 png" />
+- #### When Copy&Pasta CTRL+C process takes too long, there is a little flow with timeout to prevent unexpected behaviour
+<img loading="lazy" src="./_resources/images/9.png" alt="9 png" />
+<img loading="lazy" src="./_resources/images/10.png" alt="10 png" />
+<img loading="lazy" src="./_resources/images/11.png" alt="11 png" />
