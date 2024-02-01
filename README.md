@@ -17,7 +17,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
   </tr>
  </table>
  
-#### Informs about empty Copy&Pasta CTRL+C
+- #### Informs about empty Copy&Pasta CTRL+C
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><p align="center">NewLine CRLF (Carriage Return/Line Feed)</p></td>
@@ -30,7 +30,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
  </table>
  
 
-#### Informs about unwanted combinations such as LAlt+C or LWin+C
+- #### Informs about unwanted combinations such as LAlt+C or LWin+C
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/5.png" alt="5 png" width=300 height=389 hspace="10" /></td>
