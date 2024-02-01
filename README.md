@@ -19,7 +19,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><p align="center">NewLine CRLF (Carriage Return/Line Feed)</p></td>
-   <td style="border: 0 !important;"><p align="center">Copy already exists in the current clipboard (same bitwise copy)</p></td>
+   <td style="border: 0 !important;"><p align="center">Copy already exists in the current clipboard</p></td>
   </tr>
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/4.png" alt="4 png" width=388 height=504 hspace="10" /></td>
