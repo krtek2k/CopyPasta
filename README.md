@@ -8,8 +8,8 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
   <tr>
    <td><img loading="lazy" src="./_resources/images/1.png" alt="1 png" width=470 height=480 /></td>
    <td><img loading="lazy" src="./_resources/images/2.png" alt="2 png" width=470 height=480 /></td>
-   <td><img loading="lazy" src="./_resources/images/3.png" alt="3 png" width=470 height=480 /></td>
   </tr>
+   <td><img loading="lazy" src="./_resources/images/3.png" alt="3 png" width=470 height=480 /></td>
  </table>
 - informs about empty Copy&Pasta CTRL+C or A_Tab or up to 3 Space 
 - informs about CRLF (Carriage Return/Line Feed) as an empty Copy&Pasta
