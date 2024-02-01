@@ -6,8 +6,8 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
 Features:
 - informs about sucessful Copy&Pasta CTRL+C
 <p float="left">
-  <img loading="lazy" src="./_resources/images/1.png" alt="1 png" />
-  <img loading="lazy" src="./_resources/images/2.png" alt="2 png" />
+  <img loading="lazy" src="./_resources/images/1.png" alt="1 png" />&nbsp; &nbsp;
+  <img loading="lazy" src="./_resources/images/2.png" alt="2 png" />&nbsp; &nbsp;
   <img loading="lazy" src="./_resources/images/3.png" alt="3 png" />
 </p>
 - informs about empty Copy&Pasta CTRL+C or A_Tab or up to 3 Space 
