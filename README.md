@@ -4,7 +4,7 @@ Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the proce
 Basically just shows tooltip at caret or at mouse. Does not interrupt or change any thing.
 
 #### Informs about sucessful Copy&Pasta CTRL+C
-<table style="border:none; !important">
+<table style="border: 0 !important;">
   <tr style="border:none;">
    <td style="border:none;"><img loading="lazy" src="./_resources/images/1.png" alt="1 png" width=388 height=504 hspace="20" /></td>
    <td style="border:none;"><img loading="lazy" src="./_resources/images/2.png" alt="2 png" width=388 height=504 hspace="20" /></td>
