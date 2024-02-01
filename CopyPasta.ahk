@@ -3,7 +3,7 @@
 ; Author:    krtek2k
 ; Github:    https://github.com/krtek2k/CopyPasta
 ; Date:      2024-01-28
-; Version:   1.1
+; Version:   1.2
 
 /*
  * Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the process of copying nothing in the clipboard
@@ -18,60 +18,115 @@
 #Requires AutoHotkey v2.0-rc.1 64-bit
 #SingleInstance Force
 CoordMode("ToolTip", "Screen")
+DEBUG_MODE := false
 
 class CopyPasta {
 		
 	class Settings {
 	
-		static ttip_cooldown_ms := 1300
-		static ttip_cooldown_error_multiplier := 2
+		static ttip_cooldown_ms := 1500
+		static ttip_cooldown_error_multiplier := 1.5
 		static ttip_offset := 10
 		
 		static ttip_msg_clip_lenght_limit := 200
 		
-		static ttip_msg_app := "COPYPASTA!"
+		static ttip_msg_app := "COPY( ͡ᵔ ͜ʖ ͡ᵔ )PASTA!"
 		static ttip_msg_line_icon := "✔"
+		static ttip_msg_line_success := "{1} {2}"
 		static ttip_msg_error_line_icon := "❌"
 		static ttip_msg_error_line_full := "{1} {1} {1} {1} {1} {1} {1} {1} {1}"
 		static ttip_msg_error_line_side := "{1}                                    {1}"
 		static ttip_msg_error_line_app := "{1}       {2}       {1}"
-		static ttip_msg_error_line_emoji_shrug := "{1}         ¯\_( •︠ ͜ʖ ︡•)_/¯       {1}"
-		static ttip_msg_error_line_err_empty := "{1}            EMPTY            {1}"
+		static ttip_msg_error_line_emoji_shrug := "{1}   COPY( •︠ ͜ʖ ︡•)PASTA! {1}"
+		static ttip_msg_error_line_err_empty := "{1}             EMPTY           {1}"
 		static ttip_msg_error_line_err_fn := "{1}             Fn+C             {1}"
 		static ttip_msg_error_line_err_win := "{1}             Win+C           {1}"
 		static ttip_msg_error_line_err_alt := "{1}              Alt+C            {1}"
 		static ttip_msg_error_line_err_longer_than_expected := "{1}      HMMMMM...      {1}"
 		static ttip_msg_error_line_err_waiting := "{1} ⏳ WAITING....(5s) ⏳ {1}"
 		static ttip_msg_error_line_err_timeout := "{1}     🏁 TIMEOUT 🏁     {1}"
+		static ttip_msg_debug_line_full := "🛠 DEBUG_MODE 🛠"
+		static ttip_msg_debug_line_duplicate := "{1}         OLD ENTRY       {1}"
 	}
 	
 	__Init(){
-		ToolTip() ; off all tooltips
+		this.QueueTooltipDissmiss(0) ; off all tooltips
 	}
 	__New(copyPastaEvent) {
 		this.Event := copyPastaEvent
 	}
 	__Delete() {
-		this.QueueTooltipDissmiss(this.Event.IsError ? CopyPasta.Settings.ttip_cooldown_ms * CopyPasta.Settings.ttip_cooldown_error_multiplier : CopyPasta.Settings.ttip_cooldown_ms)
+		calcDissmissTimer := CopyPasta.Settings.ttip_cooldown_ms
+		if (this.Event.IsError)
+			calcDissmissTimer *= CopyPasta.Settings.ttip_cooldown_error_multiplier 
+		if (DEBUG_MODE)
+			calcDissmissTimer += 2000
+		this.QueueTooltipDissmiss(calcDissmissTimer)
+		global CbOrigCb := ""
+		global CbOrigBufferSize := 0
 	}
 	
 	ShowTooltip() {
+		if (DEBUG_MODE)
+			return this
 		if hwnd := GetCaretPosEx(&x, &y, &w, &h){
 			ToolTip(this.Event.Message, x + CopyPasta.Settings.ttip_offset, y + h + CopyPasta.Settings.ttip_offset)
 		}
 		else {
 			ToolTip(this.Event.Message)
 		}
+		return this
 	}
 	
+	ShowDebug(callStack) {
+		if (!DEBUG_MODE)
+			return this
+			
+		this.QueueTooltipDissmiss(0)
+		if hwnd := GetCaretPosEx(&x, &y, &w, &h){
+			ToolTip(
+				this.BuildDebugMessage(callStack)
+				, x + CopyPasta.Settings.ttip_offset, y + h + CopyPasta.Settings.ttip_offset
+			)
+		} 
+		else {
+			ToolTip(this.BuildDebugMessage(callStack))
+		}
+		return this
+	}
 	QueueTooltipDissmiss(periodMs) {
-		SetTimer () => (ToolTip()), -periodMs  
+		SetTimer () => (ToolTip()), -periodMs 
+	}	
+	BuildDebugMessage(callStack) {
+		eventMessage := ""
+		eventType := StrReplace(Type(this.Event), "CopyPasta", "", 1) ;eventType := StrReplace(StrReplace(Type(this.Event), "CopyPasta", "", 1), "Event", "")
+		Loop Parse, this.Event.Message, "`n"
+		{
+			eventMessage := eventMessage A_Tab A_Tab A_Space A_LoopField "`n"
+		}
+		return (
+			CopyPasta.Settings.ttip_msg_debug_line_full
+			"`n`n"
+			"CallStack:"
+			A_Tab callStack A_Tab
+			"`n"
+			A_Tab A_Tab "BufferSize: " ClipboardAll().Size " DataType: " (DllCall("IsClipboardFormatAvailable", "Uint", 1) ? 1 : 2)
+			"`n"
+			"Event:"
+			A_Tab A_Tab (eventType!="" ? eventType: (Format(CopyPasta.Settings.ttip_msg_line_success, CopyPasta.Settings.ttip_msg_line_icon, CopyPasta.Settings.ttip_msg_app)))
+			"`n"
+			A_Tab A_Tab "{"
+			"`n"
+			eventMessage A_Tab
+			A_Tab "}"
+			"`n "
+		)
 	}
 }
 
 class CopyPastaEventBase {
 
-	IsError => true
+	IsError => true ; most of events are errors
 	Message => this.BuildMessage("")
 	
 	BuildMessage(msg) {
@@ -81,13 +136,11 @@ class CopyPastaEventBase {
 				"`n"
 				Format(CopyPasta.Settings.ttip_msg_error_line_side, CopyPasta.Settings.ttip_msg_error_line_icon)
 				"`n"
-				Format(CopyPasta.Settings.ttip_msg_error_line_app, CopyPasta.Settings.ttip_msg_error_line_icon, CopyPasta.Settings.ttip_msg_app)
+				Format(CopyPasta.Settings.ttip_msg_error_line_emoji_shrug, CopyPasta.Settings.ttip_msg_error_line_icon)
 				"`n"
 				Format(CopyPasta.Settings.ttip_msg_error_line_side, CopyPasta.Settings.ttip_msg_error_line_icon)
 				"`n"
 				msg
-				"`n"
-				Format(CopyPasta.Settings.ttip_msg_error_line_emoji_shrug, CopyPasta.Settings.ttip_msg_error_line_icon)
 				"`n"
 				Format(CopyPasta.Settings.ttip_msg_error_line_side, CopyPasta.Settings.ttip_msg_error_line_icon)
 				"`n"
@@ -96,10 +149,9 @@ class CopyPastaEventBase {
 		}
 		else {
 			return (
-				CopyPasta.Settings.ttip_msg_line_icon
-				" "
-				CopyPasta.Settings.ttip_msg_app
-				"`n" msg
+				Format(CopyPasta.Settings.ttip_msg_line_success, CopyPasta.Settings.ttip_msg_line_icon, CopyPasta.Settings.ttip_msg_app)
+				"`n" 
+				msg
 			)
 		}
 	}
@@ -123,12 +175,6 @@ class CopyPastaWaitingEvent extends CopyPastaEventBase  {
 class CopyPastaTimeoutEvent extends CopyPastaEventBase  {
 	Message => this.BuildMessage(Format(CopyPasta.Settings.ttip_msg_error_line_err_timeout, CopyPasta.Settings.ttip_msg_error_line_icon))
 }
-class CopyPastaEmptyEvent extends CopyPastaEventBase  {
-	Message => this.BuildMessage(Format(CopyPasta.Settings.ttip_msg_error_line_err_empty, CopyPasta.Settings.ttip_msg_error_line_icon))
-}
-class CopyPastaNotTextEvent extends CopyPastaEventBase  {
-	IsError => false
-}
 
 class CopyPastaEvent extends CopyPastaEventBase  {
 
@@ -139,99 +185,103 @@ class CopyPastaEvent extends CopyPastaEventBase  {
 	
 	Message
 	{
-		get {
-			if (this._isError) {
-				return this.BuildMessage(Format(CopyPasta.Settings.ttip_msg_error_line_err_empty, CopyPasta.Settings.ttip_msg_error_line_icon))
-			}
-			return this.BuildMessage(this._message)
-		}
-		set => this._message := value
+		get => this.BuildMessage(this._message)
 	}
 	
 	__New() {
-		; trim and shorten for tooltip message
+		this._isError := false
+		; trim and shorten the tooltip message
 		this._message := SubStr(
-			StrReplace(Trim(A_Clipboard), A_Tab), 
+			Trim(A_Clipboard), 
 			1, 
 			CopyPasta.Settings.ttip_msg_clip_lenght_limit
 		)
-		this._isError := (StrLen(A_Clipboard) <= 3 && (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n")) ? true : false 
+		
+		; determine dataType - 0 empty 1 text+copy file >1 not text
+		dataType := (DllCall("IsClipboardFormatAvailable", "Uint", 1) ? 1 : 2)
+		; validate
+		Switch dataType
+		{
+			Case 1:
+				if (this._message = "" || this._message = "`n" || this._message = "`r" || this._message = "`r`n") {
+						this._isError := true
+						this._message := Format(CopyPasta.Settings.ttip_msg_error_line_err_empty, CopyPasta.Settings.ttip_msg_error_line_icon)
+				}
+				else if (CbOrigCb = A_Clipboard) {
+					this._isError := true
+					this._message := Format(CopyPasta.Settings.ttip_msg_debug_line_duplicate, CopyPasta.Settings.ttip_msg_error_line_icon)
+				}
+			Case 2:
+				if (CbOrigBufferSize = ClipboardAll().Size) {
+					this._isError := true
+					this._message := Format(CopyPasta.Settings.ttip_msg_debug_line_duplicate, CopyPasta.Settings.ttip_msg_error_line_icon)
+				}
+			Case 0:
+				this._isError := true
+				this._message := Format(CopyPasta.Settings.ttip_msg_error_line_err_empty, CopyPasta.Settings.ttip_msg_error_line_icon)
+		}
 	}
 }
 
 ; Ctrl=^
-$^c::{
-	OnClipboardChange OnChangeHandleCopyPasta
-	Send "^c"
-	if !ClipWait(1, 1) {
-		HandleCopyPasta()
+#HotIf !WinActive("ahk_class QPasteClass") ;skip on Ditto the clipboard manager, before paste its using CTRL+C
+	$^c::{
+		global CbOrigBufferSize := ClipboardAll().Size
+		global CbOrigCb := A_Clipboard
+		Send "^c"
+		Sleep 20
+		HandleOnClipboardNotChangedYet("CTRL+C")
 	}
-	else {
-		CopyPasta(CopyPastaEmptyEvent()).ShowTooltip()
-	}
-}
+#HotIf 
 
 ; Ctrl=^
-$^x::{
-	OnClipboardChange OnChangeHandleCopyPasta
+$^x::{ 
+	global CbOrigBufferSize := ClipboardAll().Size
+	global CbOrigCb := A_Clipboard
 	Send "^x"
-	if !ClipWait(1, 1)
-		HandleCopyPasta()
-	else
-		CopyPasta(CopyPastaEmptyEvent()).ShowTooltip()
+	Sleep 20
+	HandleOnClipboardNotChangedYet("CTRL+X")
 }
 
 ; FN key - vkFF sc163 not found 
 $vkFF::{ 	
 	HotIf (*) => GetKeyState("vkFF", "P")
-	Hotkey "*c",(*) => CopyPasta(CopyPastaFnEvent()).ShowTooltip()
+	Hotkey "*c",(*) => CopyPasta(CopyPastaFnEvent()).ShowTooltip().ShowDebug("Fn+C")
 	KeyWait "vkFF"
 }
 
 ; LWin=#
 $#c::{
-	CopyPasta(CopyPastaLWinEvent()).ShowTooltip()
+	CopyPasta(CopyPastaLWinEvent()).ShowTooltip().ShowDebug("LWin+C")
 	Send "#c"
 }
 
 ; Alt=! 
 $!c::{
-	CopyPasta(CopyPastaLAltEvent()).ShowTooltip()
+	CopyPasta(CopyPastaLAltEvent()).ShowTooltip().ShowDebug("Alt+C")
 	Send "!c"
 }
 
-OnChangeHandleCopyPasta(dataType) {
-	if (dataType = 1) ; text
-	{
-		CopyPasta(CopyPastaEvent()).ShowTooltip()
-		return
-	}
-	CopyPasta(CopyPastaNotTextEvent()).ShowTooltip()
-}
-
-HandleCopyPasta() {
-	if ClipWait(1, 0) {
-		CopyPasta(CopyPastaEvent()).ShowTooltip()
-	}
-	else {
-		CopyPasta(CopyPastaLongerThanExpectedEvent()).ShowTooltip()
-		
-		if ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000, 0) {
-			CopyPasta(CopyPastaEvent()).ShowTooltip()
-		}
-		else {
-			CopyPasta(CopyPastaWaitingEvent()).ShowTooltip()
-			
-			if ClipWait(5, 0) {
-				CopyPasta(CopyPastaEvent()).ShowTooltip()
+HandleOnClipboardNotChangedYet(stackTrace) {
+	if !ClipWait(1, 1) {
+			CopyPasta(CopyPastaLongerThanExpectedEvent()).ShowTooltip().ShowDebug(stackTrace "/NotChangedYet/Long1")
+			if (ClipWait((CopyPasta.Settings.ttip_cooldown_ms+250)/1000, 1)) {
+				CopyPasta(CopyPastaEvent()).ShowTooltip().ShowDebug(stackTrace "/NotChangedYet/CLIPWAIT{ANY-OK}")
 			}
 			else {
-				CopyPasta(CopyPastaTimeoutEvent()).ShowTooltip()
+				CopyPasta(CopyPastaWaitingEvent()).ShowTooltip().ShowDebug(stackTrace "/NotChangedYet/Long2")
+				if ClipWait(5, 1)
+					CopyPasta(CopyPastaEvent()).ShowTooltip().ShowDebug(stackTrace "/NotChangedYet/CLIPWAIT{ANY-OK}")
+				else 
+					CopyPasta(CopyPastaTimeoutEvent()).ShowTooltip().ShowDebug(stackTrace "/NotChangedYet/Long3")
 			}
-		}
+	}
+	else {
+		CopyPasta(CopyPastaEvent()).ShowTooltip().ShowDebug(stackTrace "/NotChangedYet/CLIPWAIT{ANY-OK}")
 	}
 }
 
+; ############ TOOLS ############
 GetCaretPosEx(&x?, &y?, &w?, &h?) {
     #Requires AutoHotkey v2.0-rc.1 64-bit
     x := h := w := h := 0
@@ -304,3 +354,23 @@ GetCaretPosEx(&x?, &y?, &w?, &h?) {
         guiThreadInfo := Buffer(72), NumPut("uint", guiThreadInfo.Size, guiThreadInfo)
     }
 }
+; script auto reload on save in debug mode
+#HotIf WinActive("ahk_class Notepad++") ; Reload ahk on CTRL+S when debugging
+    ~^s:: {
+		if (!DEBUG_MODE) {
+			Send "^s"
+			return
+		}
+		winTitle := WinGetTitle("A")  ; "A" matches "Active" window
+		if (InStr(winTitle, A_Scriptdir) or InStr(winTitle, A_ScriptName)) { ; Only when the script dir/filename is in the titlebar
+		  Reload
+		  return
+		}
+		
+		SplitPath(A_Scriptdir, &topDir) ; Only when the top dir name is in the titlebar
+		if (InStr(winTitle, topDir)) {
+		  Reload
+		  return
+		}
+    }
+#HotIf 
