@@ -2,13 +2,9 @@
 Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the process of copying nothing in the clipboard
 
 Basically just shows tooltip at caret or at mouse. Does not interrupt or change any thing.
-<style>
-table, td, th {
-   border: none!important;
-}
-</style>
+
 #### Informs about sucessful Copy&Pasta CTRL+C
-<table>
+<table style="border:none;">
   <tr>
    <td><img loading="lazy" src="./_resources/images/1.png" alt="1 png" width=388 height=504 hspace="20" /></td>
    <td><img loading="lazy" src="./_resources/images/2.png" alt="2 png" width=388 height=504 hspace="20" /></td>
