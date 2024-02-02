@@ -3,7 +3,7 @@
 ; Author:    krtek2k
 ; Github:    https://github.com/krtek2k/CopyPasta
 ; Date:      2024-01-28
-; Version:   1.2.1
+; Version:   1.2.2
 
 /*
  * Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the process of copying nothing in the clipboard
@@ -30,9 +30,8 @@ class CopyPasta {
 		
 		static ttip_msg_clip_lenght_limit := 200
 		
-		static ttip_msg_app := " ( • ͜ʖ •)"
-		static ttip_msg_line_icon := "✔"
-		static ttip_msg_line_success := "{1}{2}"
+		static ttip_msg_line_icon := "⎀✔"
+		static ttip_msg_line_success := "{1}"
 		static ttip_msg_error_line_icon := "❌"
 		static ttip_msg_error_line_full := "{1} {1} {1} {1} {1} {1} {1} {1} {1}"
 		static ttip_msg_error_line_side := "{1}                                    {1}"
@@ -149,7 +148,7 @@ class CopyPastaEventBase {
 		}
 		else {
 			return (
-				Format(CopyPasta.Settings.ttip_msg_line_success, CopyPasta.Settings.ttip_msg_line_icon, CopyPasta.Settings.ttip_msg_app)
+				Format(CopyPasta.Settings.ttip_msg_line_success, CopyPasta.Settings.ttip_msg_line_icon)
 				"`n" 
 				msg
 			)
