@@ -3,7 +3,7 @@
 ; Author:    krtek2k
 ; Github:    https://github.com/krtek2k/CopyPasta
 ; Date:      2024-01-28
-; Version:   1.2
+; Version:   1.2.1
 
 /*
  * Informs about blank Copy&Pasta CTRL+C and prevents, by this, repeating the process of copying nothing in the clipboard
@@ -30,14 +30,14 @@ class CopyPasta {
 		
 		static ttip_msg_clip_lenght_limit := 200
 		
-		static ttip_msg_app := "COPY( ͡ᵔ ͜ʖ ͡ᵔ )PASTA!"
+		static ttip_msg_app := " ( • ͜ʖ •)"
 		static ttip_msg_line_icon := "✔"
-		static ttip_msg_line_success := "{1} {2}"
+		static ttip_msg_line_success := "{1}{2}"
 		static ttip_msg_error_line_icon := "❌"
 		static ttip_msg_error_line_full := "{1} {1} {1} {1} {1} {1} {1} {1} {1}"
 		static ttip_msg_error_line_side := "{1}                                    {1}"
 		static ttip_msg_error_line_app := "{1}       {2}       {1}"
-		static ttip_msg_error_line_emoji_shrug := "{1}   COPY( •︠ ͜ʖ ︡•)PASTA! {1}"
+		static ttip_msg_error_line_emoji_shrug := "{1}             ( •︠ ͜ʖ ︡•)             {1}"
 		static ttip_msg_error_line_err_empty := "{1}             EMPTY           {1}"
 		static ttip_msg_error_line_err_fn := "{1}             Fn+C             {1}"
 		static ttip_msg_error_line_err_win := "{1}             Win+C           {1}"
@@ -46,7 +46,7 @@ class CopyPasta {
 		static ttip_msg_error_line_err_waiting := "{1} ⏳ WAITING....(5s) ⏳ {1}"
 		static ttip_msg_error_line_err_timeout := "{1}     🏁 TIMEOUT 🏁     {1}"
 		static ttip_msg_debug_line_full := "🛠 DEBUG_MODE 🛠"
-		static ttip_msg_debug_line_duplicate := "{1}         OLD ENTRY       {1}"
+		static ttip_msg_debug_line_duplicate := "{1}     NOTHING NEW    {1}"
 	}
 	
 	__Init(){
