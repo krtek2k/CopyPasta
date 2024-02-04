@@ -15,7 +15,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
   </tr>
  </table>
  
-- #### Warnings for Copy&Pasta CTRL+C
+ #### Warnings for Copy&Pasta CTRL+C
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><p align="center">Copy is already in the clipboard (same copy)</p></td>
@@ -28,7 +28,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
  </table>
  
 
-- #### Unwanted combinations such as LAlt+C or LWin+C
+#### Unwanted combinations such as LAlt+C or LWin+C
 <table style="border: 0 !important;">
   <tr style="border: 0 !important;">
    <td style="border: 0 !important;"><img loading="lazy" src="./_resources/images/5.png" alt="5 png" width=349 height=384  /></td>
@@ -37,7 +37,7 @@ Basically just shows tooltip at caret or at mouse. Does not interrupt or change 
   </tr>
  </table>
  
-- #### When Copy&Pasta CTRL+C process takes too long, there is a little flow with timeout to prevent unexpected behaviour
+#### When Copy&Pasta CTRL+C process takes too long, there is a little flow with timeout to prevent unexpected behaviour
 <img loading="lazy" src="./_resources/images/8.png" alt="9 png" />
 <img loading="lazy" src="./_resources/images/9.png" alt="10 png" />
 <img loading="lazy" src="./_resources/images/10.png" alt="11 png" />
