@@ -17,6 +17,14 @@
 
 #Requires AutoHotkey v2.0-rc.1 64-bit
 #SingleInstance Force
+if not (A_IsAdmin or RegExMatch(DllCall("GetCommandLine", "str"), " /restart(?!\S)")) { ; needs to be run as admin, copypaste not working in apps that are in administrator mode 
+  try { ; try to run as an administrator, if could not be run as an administrator, it will not work with apps run as an administrator.
+    if A_IsCompiled
+      Run '*RunAs "' A_ScriptFullPath '" /restart'
+    else
+      Run '*RunAs "' A_AhkPath '" /restart "' A_ScriptFullPath '"'
+  }
+}
 CoordMode("ToolTip", "Screen")
 DEBUG_MODE := false
 
@@ -45,7 +53,7 @@ class CopyPasta {
 		static ttip_msg_error_line_err_waiting := "{1} ⏳ WAITING....(5s) ⏳ {1}"
 		static ttip_msg_error_line_err_timeout := "{1}     🏁 TIMEOUT 🏁     {1}"
 		static ttip_msg_debug_line_full := "🛠 DEBUG_MODE 🛠"
-		static ttip_msg_debug_line_duplicate := "{1}     NOTHING NEW    {1}"
+		static ttip_msg_debug_line_duplicate := "{1}   ALREADY COPIED  {1}"
 	}
 	
 	__Init(){
